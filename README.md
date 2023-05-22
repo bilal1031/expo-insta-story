@@ -1,7 +1,7 @@
 # expo-insta-story
 
-This library is in extension of --- which includes showing videos on the insta-stories
-using expo-av which is not currently supported by ---
+This library is in extension of <b>react-native-insta-story</b> which includes showing videos on the insta-stories
+using expo-av which is not currently supported by <b>react-native-insta-story</b>
 
 <p align="center">
 <img src="./images/example.gif" height="500" />
@@ -19,12 +19,6 @@ or
 
 ```javascript
 yarn add expo-insta-story
-```
-
-#### 2. Step
-
-```javascript
-cd ios && pod install
 ```
 
 ## Import
@@ -85,13 +79,13 @@ const data = [
           'https://image.freepik.com/free-vector/universe-mobile-wallpaper-with-planets_79603-600.jpg',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 1 swiped'),
-        duration: 10
+        duration: 10, //This tells the duration of each screen
       },
       {
         story_id: 2,
         story_image:
           'https://image.freepik.com/free-vector/mobile-wallpaper-with-fluid-shapes_79603-601.jpg',
-        duration: 10
+        duration: 10,
       },
     ],
   },
@@ -107,27 +101,21 @@ const data = [
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjORKvjcbMRGYPR3QIs3MofoWkD4wHzRd_eg&usqp=CAU',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 1 swiped'),
-        duration: 10
+        duration: 10,
       },
       {
         story_id: 2,
-        story_image:
-          'https://demo-link/123-123-123.mp4',
+        story_image: 'https://demo-link/123-123-123.mp4',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 2 swiped'),
-        duration: 10
-        isVideo: true
+        duration: 10,
+        isVideo: true, //This indicates that this item is a video
       },
     ],
   },
 ];
 
-<ExpoInstaStory
-  data={data}
-  duration={10}
-/>
-
-
+<ExpoInstaStory data={data} duration={10} />;
 ```
 
 ### Custom components
