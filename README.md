@@ -1,4 +1,4 @@
-# expo-insta-story
+# expo-insta-story [Not Ready For Prodcution Usage]
 
 This library is in extension of <b>react-native-insta-story</b> which includes showing videos on the insta-stories
 using expo-av which is not currently supported by <b>react-native-insta-story</b>
@@ -39,7 +39,7 @@ import ExpoInstaStory from 'expo-insta-story';
 | onStorySeen                | Called each time story is seen                      | function      |     null      |
 | onClose                    | Todo when close                                     | function      |     null      |
 | onStart                    | Todo when start                                     | function      |     null      |
-| duration                   | Per story duration seconds                          | number        |      10       |
+| duration                   | default per story duration seconds                  | number        |      10       |
 | swipeText                  | Text of swipe component                             | string        |   Swipe Up    |
 | renderSwipeUpComponent     | Render a custom swipe up component                  | function      |               |
 | renderCloseComponent       | Render a custom close button                        | function      |               |
@@ -57,7 +57,7 @@ import ExpoInstaStory from 'expo-insta-story';
 | storyImageStyle            | For story image style                               | ImageStyle    |               |
 | storyAvatarImageStyle      | For story avatar image style                        | ImageStyle    |               |
 | storyContainerStyle        | For story container style                           | ViewStyle     |               |
-| storyVideoStyle            | For story container style                           | ViewStyle     |               |
+| storyVideoStyle            | For story video container style                     | ViewStyle     |               |
 
 ## Usage
 
