@@ -1,7 +1,6 @@
-# expo-insta-story [Not Ready For Prodcution Usage]
+# expo-insta-story
 
-This library is an extension of <b>react-native-insta-story</b>. It includes showing images and videos on the insta-stories component
-using expo-av which is not currently supported by <b>react-native-insta-story</b>
+This library is an extension of <b>react-native-insta-story</b>. It includes showing images and videos on the insta-stories component using expo-av which is currently not supported by <b>react-native-insta-story<b>
 
 <p align="center">
 <img src="./images/example.gif" height="500" />
