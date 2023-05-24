@@ -1,16 +1,15 @@
 {
   "name": "expo-insta-story",
   "title": "React Native Expo Insta Story",
-  "version": "1.1.9",
+  "version": "1.0.0",
   "description": "Story component for React Native.",
   "main": "index.ts",
   "files": [
     "README.md",
-    "android",
+    "!android",
     "index.ts",
-    "ios",
+    "!ios",
     "src",
-    "react-native-insta-story.podspec",
     "!ios/build",
     "!android/build",
     "!example"
@@ -60,8 +59,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
     "prettier": "^2.7.1",
-    "react": "^16.9.0",
-    "react-native": "^0.69.1",
+    "react": "18.2.0",
+    "react-native": "0.71.8",
     "typescript": "^4.8.4"
   },
   "scripts": {

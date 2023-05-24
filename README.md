@@ -1,6 +1,6 @@
 # expo-insta-story [Not Ready For Prodcution Usage]
 
-This library is an extension of <b>react-native-insta-story</b> which includes showing videos on the insta-stories
+This library is an extension of <b>react-native-insta-story</b>. It includes showing images and videos on the insta-stories component
 using expo-av which is not currently supported by <b>react-native-insta-story</b>
 
 <p align="center">
@@ -20,6 +20,8 @@ or
 ```javascript
 yarn add expo-insta-story
 ```
+
+#### 2. Step
 
 ## Import
 
@@ -71,7 +73,7 @@ const data = [
     id: 1,
     avatar_image:
       'https://pbs.twimg.com/profile_images/1222140802475773952/61OmyINj.jpg',
-    user_name: 'Ahmet Çağlar Durmuş',
+    user_name: 'Muhammad Bilal',
     stories: [
       {
         story_id: 1,
@@ -109,7 +111,10 @@ const data = [
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 2 swiped'),
         duration: 10,
-        isVideo: true, //This indicates that this item is a video
+        /* This indicates that this item is a video,
+           when passing a video urlm this field must be added
+        */
+        isVideo: true,
       },
     ],
   },
