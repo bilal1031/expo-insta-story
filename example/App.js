@@ -5,8 +5,8 @@ import ExpoInstaStory from 'expo-insta-story';
 export default function App() {
   function createData() {
     const array = [];
-    const userCount = 10;
-    const userStoryCount = 15;
+    const userCount = 3;
+    const userStoryCount = 3;
 
     for (let i = 1; i <= userCount; i++) {
       const storyArray = [];
