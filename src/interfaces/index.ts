@@ -9,7 +9,7 @@ import {
 export type NextOrPrevious = 'next' | 'previous';
 
 export interface IUserStory<T = Record<string, any>> {
-  user_id: number;
+  id: number;
   avatar_image: string | undefined;
   user_name: string;
   stories: IUserStoryItem<T>[];
@@ -19,10 +19,12 @@ export interface IUserStory<T = Record<string, any>> {
 
 export interface IUserStoryItem<T = Record<string, any>> {
   story_id: number;
-  story_image: string | undefined;
+  story: string | undefined;
   /** Function that gets called when the swipe up button is pressed */
   onPress?: (props?: any) => any;
   swipeText?: string;
+  duration: number;
+  isVideo?: boolean;
   /** Add your own custom props to access in the custom render methods */
   customProps?: T;
   /** FOR INTERNAL USE ONLY */

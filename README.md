@@ -1,6 +1,6 @@
 # expo-insta-story [Not Ready For Prodcution Usage]
 
-This library is in extension of <b>react-native-insta-story</b> which includes showing videos on the insta-stories
+This library is an extension of <b>react-native-insta-story</b> which includes showing videos on the insta-stories
 using expo-av which is not currently supported by <b>react-native-insta-story</b>
 
 <p align="center">

@@ -97,12 +97,12 @@ export const StoryListItem = ({
       if (prevCurrent) {
         if (
           current > prevCurrent &&
-          content[current - 1].story_image == content[current].story_image
+          content[current - 1].story == content[current].story
         ) {
           start();
         } else if (
           current < prevCurrent &&
-          content[current + 1].story_image == content[current].story_image
+          content[current + 1].story == content[current].story
         ) {
           start();
         }
@@ -197,7 +197,7 @@ export const StoryListItem = ({
   React.useEffect(() => {
     if (onStorySeen && currentPage === index) {
       onStorySeen({
-        user_id: userId,
+        id: userId,
         avatar_image: profileImage,
         user_name: profileName,
         story: content[current],
@@ -444,5 +444,9 @@ const styles = StyleSheet.create({
   swipeText: {
     color: 'white',
     marginTop: 5,
+  },
+  video: {
+    height: Math.floor(height),
+    width: Math.floor(width),
   },
 });
