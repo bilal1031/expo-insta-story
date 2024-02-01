@@ -13,7 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import { Video } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 
 import { usePrevious, isNullOrWhitespace } from './helpers';
 import {
@@ -221,7 +221,7 @@ export const StoryListItem = ({
               shouldPlay
               source={{ uri: content[current].story }}
               style={[styles.video, storyVideoStyle]}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
               isLooping
               onLoad={() => start()}
               isMuted={currentPage !== index}

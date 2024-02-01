@@ -49,14 +49,21 @@ export const Story = ({
 
   // Component Functions
   const _handleStoryItemPress = (item: IUserStory, index?: number) => {
-    const newData = dataState.slice(index);
+    // const newData = dataState.slice(index);
     if (onStart) {
       onStart(item);
     }
 
     setCurrentPage(0);
-    setSelectedData(newData);
+    setSelectedData(dataState);
     setIsModalOpen(true);
+
+    const storyIndex = selectedData.findIndex(
+      (story: IUserStory) => story.id == item.id,
+    );
+    setTimeout(() => {
+      cube.current?.scrollTo(storyIndex);
+    }, 600);
   };
 
   useEffect(() => {

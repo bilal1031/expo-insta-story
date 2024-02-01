@@ -1,7 +1,7 @@
 {
   "name": "expo-insta-story",
   "title": "React Native Expo Insta Story",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Story component for React Native.",
   "main": "index.ts",
   "files": [
