@@ -3083,7 +3083,7 @@ expo-font@~11.1.1:
 
 "expo-insta-story@git+https://github.com/bilal1031/expo-insta-story.git":
   version "1.0.2"
-  resolved "git+https://github.com/bilal1031/expo-insta-story.git#af44e3e9b71760d7c7f4d43dd616b62138fed165"
+  resolved "git+https://github.com/bilal1031/expo-insta-story.git#2b2559f842b734a54028c090d4e978e17a9951e1"
   dependencies:
     expo-av "~13.2.1"
     prop-types "^15.6.2"

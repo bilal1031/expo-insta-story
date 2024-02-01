@@ -123,7 +123,8 @@ export default class CubeNavigationHorizontal extends React.Component {
   }
 
   setCurrentPage(page) {
-    this._animatedValue.setValue({ x: this.pages[page], y: 0 });
+    const pageX = width * -page;
+    this._animatedValue.setValue({ x: pageX, y: 0 });
     this.setState({
       currentPage: page,
     });

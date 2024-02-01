@@ -1,5 +1,12 @@
 import React, { Fragment, useRef, useState, useEffect } from 'react';
-import { Dimensions, View, Platform, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Platform,
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import Modal from 'react-native-modalbox';
 
 import StoryListItem from './StoryListItem';
@@ -44,7 +51,9 @@ export const Story = ({
   const [dataState, setDataState] = useState<IUserStory[]>(data);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentStory, setCurrentStory] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<IUserStory[]>([]);
+  const [showLoading, setShowLoading] = useState<boolean>(true);
   const cube = useRef<CubeNavigationHorizontal | AndroidCubeEffect>();
 
   // Component Functions
@@ -61,9 +70,7 @@ export const Story = ({
     const storyIndex = selectedData.findIndex(
       (story: IUserStory) => story.id == item.id,
     );
-    setTimeout(() => {
-      cube.current?.setCurrentPage(storyIndex);
-    }, 100);
+    setCurrentStory(storyIndex);
   };
 
   useEffect(() => {
@@ -179,6 +186,14 @@ export const Story = ({
     }
   };
 
+  const renderLoading = () => {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator color="white" size={26} />
+      </View>
+    );
+  };
+
   return (
     <Fragment>
       <View style={style}>
@@ -198,15 +213,23 @@ export const Story = ({
         />
       </View>
       <Modal
+        onOpened={() => {
+          setShowLoading(false);
+          cube.current?.setCurrentPage(currentStory);
+        }}
         style={styles.modal}
         isOpen={isModalOpen}
-        onClosed={() => setIsModalOpen(false)}
+        onClosed={() => {
+          setIsModalOpen(false);
+          setShowLoading(true);
+        }}
         position="center"
         swipeToClose
         swipeArea={250}
         backButtonClose
         coverScreen={true}
       >
+        {showLoading && renderLoading()}
         {renderCube()}
       </Modal>
     </Fragment>
@@ -218,6 +241,19 @@ const styles = StyleSheet.create({
     flex: 1,
     height,
     width,
+  },
+  loadingContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 999,
+    height: '100%',
+    width: '100%',
+  },
+  loading: {
+    fontSize: 12,
+    color: 'white',
   },
 });
 

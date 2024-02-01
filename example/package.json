@@ -13,6 +13,7 @@
     "react": "18.2.0",
     "react-native": "0.71.8",
     "expo-insta-story": "git+https://github.com/bilal1031/expo-insta-story.git"
+
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
