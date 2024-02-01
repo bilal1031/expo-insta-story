@@ -62,8 +62,8 @@ export const Story = ({
       (story: IUserStory) => story.id == item.id,
     );
     setTimeout(() => {
-      cube.current?.scrollTo(storyIndex);
-    }, 600);
+      cube.current?.setCurrentPage(storyIndex);
+    }, 100);
   };
 
   useEffect(() => {

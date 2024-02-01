@@ -122,6 +122,13 @@ export default class CubeNavigationHorizontal extends React.Component {
     });
   }
 
+  setCurrentPage(page) {
+    this._animatedValue.setValue({ x: this.pages[page], y: 0 });
+    this.setState({
+      currentPage: page,
+    });
+  }
+
   /*
     Private methods
     */

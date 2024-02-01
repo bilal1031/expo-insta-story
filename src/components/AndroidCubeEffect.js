@@ -130,6 +130,13 @@ export default class AndroidCubeEffect extends React.Component {
     });
   }
 
+  setCurrentPage(page) {
+    this._animatedValue.setValue({ x: this.pages[page], y: 0 });
+    this.setState({
+      currentPage: page,
+    });
+  }
+
   /*
     Private methods
     */

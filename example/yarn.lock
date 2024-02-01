@@ -3082,8 +3082,8 @@ expo-font@~11.1.1:
     fontfaceobserver "^2.1.0"
 
 "expo-insta-story@git+https://github.com/bilal1031/expo-insta-story.git":
-  version "1.0.0"
-  resolved "git+https://github.com/bilal1031/expo-insta-story.git#56810b9b6167e16b7a1821cbd9a30f2d79797fff"
+  version "1.0.2"
+  resolved "git+https://github.com/bilal1031/expo-insta-story.git#af44e3e9b71760d7c7f4d43dd616b62138fed165"
   dependencies:
     expo-av "~13.2.1"
     prop-types "^15.6.2"
