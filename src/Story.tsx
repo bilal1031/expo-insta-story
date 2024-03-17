@@ -67,7 +67,7 @@ export const Story = ({
     setSelectedData(dataState);
     setIsModalOpen(true);
 
-    const storyIndex = selectedData.findIndex(
+    const storyIndex = dataState.findIndex(
       (story: IUserStory) => story.id == item.id,
     );
     setCurrentStory(storyIndex);
@@ -99,7 +99,7 @@ export const Story = ({
         const newPage = currentPage + 1;
         if (newPage < selectedData.length) {
           setCurrentPage(newPage);
-          cube?.current?.scrollTo(newPage);
+          // cube?.current?.scrollTo(newPage);
         } else {
           setIsModalOpen(false);
           setCurrentPage(0);
@@ -114,7 +114,7 @@ export const Story = ({
           setCurrentPage(0);
         } else {
           setCurrentPage(newPage);
-          cube?.current?.scrollTo(newPage);
+          // cube?.current?.scrollTo(newPage);
         }
       }
     }
