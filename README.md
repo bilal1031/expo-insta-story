@@ -109,11 +109,8 @@ const data = [
         story: 'https://demo-link/123-123-123.mp4',
         swipeText: 'Custom swipe text for this story',
         onPress: () => console.log('story 2 swiped'),
-        duration: 10,
-        /* This indicates that this item is a video,
-           when passing a video urlm this field must be added
-        */
-        isVideo: true,
+        duration: 10, // The duration of the video in seconds. Specifies how long the video will be displayed.=
+        isVideo: true, // This field indicates that the item is a video. When passing a video URL, make sure to include this field.
       },
     ],
   },
