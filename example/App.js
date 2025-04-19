@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import ExpoInstaStory from 'expo-insta-story';
 
 export default function App() {
@@ -51,6 +51,14 @@ export default function App() {
             <Text>Swipe</Text>
           </View>
         }
+        renderCustomAvatarComponent={({ item }) => {
+          return (
+            <Image
+              source={{ uri: item.avatar_image }}
+              style={{ width: 50, height: 50, borderRadius: 25 }}
+            />
+          );
+        }}
         style={{ marginTop: 30 }}
       />
     </SafeAreaView>

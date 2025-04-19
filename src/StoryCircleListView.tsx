@@ -16,6 +16,7 @@ const StoryCircleListView = ({
   avatarImageStyle,
   avatarWrapperStyle,
   avatarFlatListProps,
+  renderCustomAvatarComponent,
 }: StoryCircleListViewProps) => {
   return (
     <FlatList
@@ -26,23 +27,32 @@ const StoryCircleListView = ({
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       ListFooterComponent={<View style={styles.footer} />}
-      renderItem={({ item, index }) => (
-        <StoryCircleListItem
-          avatarSize={avatarSize}
-          handleStoryItemPress={() =>
-            handleStoryItemPress && handleStoryItemPress(item, index)
+      renderItem={({ item, index }) => {
+        if (renderCustomAvatarComponent) {
+          const custom = renderCustomAvatarComponent({ item, index });
+          if (React.isValidElement(custom)) {
+            return custom;
           }
-          unPressedBorderColor={unPressedBorderColor}
-          pressedBorderColor={pressedBorderColor}
-          unPressedAvatarTextColor={unPressedAvatarTextColor}
-          pressedAvatarTextColor={pressedAvatarTextColor}
-          item={item}
-          showText={showText}
-          avatarTextStyle={avatarTextStyle}
-          avatarImageStyle={avatarImageStyle}
-          avatarWrapperStyle={avatarWrapperStyle}
-        />
-      )}
+          return null;
+        }
+        return (
+          <StoryCircleListItem
+            avatarSize={avatarSize}
+            handleStoryItemPress={() =>
+              handleStoryItemPress && handleStoryItemPress(item, index)
+            }
+            unPressedBorderColor={unPressedBorderColor}
+            pressedBorderColor={pressedBorderColor}
+            unPressedAvatarTextColor={unPressedAvatarTextColor}
+            pressedAvatarTextColor={pressedAvatarTextColor}
+            item={item}
+            showText={showText}
+            avatarTextStyle={avatarTextStyle}
+            avatarImageStyle={avatarImageStyle}
+            avatarWrapperStyle={avatarWrapperStyle}
+          />
+        );
+      }}
       {...avatarFlatListProps}
     />
   );

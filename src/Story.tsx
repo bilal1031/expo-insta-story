@@ -4,7 +4,6 @@ import {
   View,
   Platform,
   StyleSheet,
-  Text,
   ActivityIndicator,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
@@ -36,6 +35,7 @@ export const Story = ({
   renderCloseComponent,
   renderSwipeUpComponent,
   renderTextComponent,
+  renderCustomAvatarComponent,
   loadedAnimationBarStyle = {},
   unloadedAnimationBarStyle = {},
   animationBarContainerStyle = {},
@@ -210,6 +210,7 @@ export const Story = ({
           avatarWrapperStyle={avatarWrapperStyle}
           avatarImageStyle={avatarImageStyle}
           avatarFlatListProps={avatarFlatListProps}
+          renderCustomAvatarComponent={renderCustomAvatarComponent}
         />
       </View>
 
