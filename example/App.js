@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import ExpoInstaStory from 'expo-insta-story';
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
           story: 'https://picsum.photos/500/800?random=' + Math.random(),
           swipeText: 'Custom swipe text for this story',
           onPress: () => console.log(`story ${i} swiped`),
-          duration: 5,
+          duration: 2,
         });
       }
 
@@ -41,19 +41,19 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <ExpoInstaStory
         data={createData()}
         duration={10}
-        customSwipeUpComponent={
+        renderSwipeUpComponent={
           <View>
             <Text>Swipe</Text>
           </View>
         }
         style={{ marginTop: 30 }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

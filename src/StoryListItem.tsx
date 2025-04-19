@@ -13,7 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import { ResizeMode, Video } from 'expo-av';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { usePrevious, isNullOrWhitespace } from './helpers';
 import {
@@ -26,11 +26,10 @@ const { width, height } = Dimensions.get('window');
 
 export const StoryListItem = ({
   index,
-  key,
   userId,
   profileImage,
   profileName,
-  duration,
+  duration = 10,
   onFinish,
   onClosePress,
   stories,
@@ -57,14 +56,31 @@ export const StoryListItem = ({
       finish: 0,
     })),
   );
-
+  const [currentContent, setCurrentContent] = useState<IUserStoryItem | null>(
+    null,
+  );
   const [current, setCurrent] = useState(0);
 
   const progress = useRef(new Animated.Value(0)).current;
-
   const prevCurrentPage = usePrevious(currentPage);
 
-  const video = useRef(null);
+  const videoSource = content[current]?.isVideo
+    ? content[current].story ?? null
+    : null;
+
+  const player = useVideoPlayer(videoSource, (player) => {
+    if (videoSource) {
+      player.loop = false;
+      player.play();
+    }
+  });
+
+  // Set mute state on the player instance
+  useEffect(() => {
+    if (player) {
+      player.muted = currentPage !== index;
+    }
+  }, [player, currentPage, index]);
 
   useEffect(() => {
     let isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;
@@ -111,6 +127,26 @@ export const StoryListItem = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
 
+  // For video progress tracking
+  useEffect(() => {
+    if (content[current]?.isVideo && player) {
+      const interval = setInterval(() => {
+        if (player.duration > 0) {
+          progress.setValue(player.currentTime / player.duration);
+          // If video ended, go to next story
+          if (
+            player.status === 'readyToPlay' &&
+            player.currentTime >= player.duration - 0.1 &&
+            player.duration > 0
+          ) {
+            next();
+          }
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [player, current, content]);
+
   function start() {
     setLoad(false);
     progress.setValue(0);
@@ -118,6 +154,11 @@ export const StoryListItem = ({
   }
 
   function startAnimation() {
+    if (content[current]?.isVideo) {
+      // Don't animate for video, progress is handled by useEffect above
+      return;
+    }
+
     Animated.timing(progress, {
       toValue: 1,
       duration: content[current].duration
@@ -207,7 +248,6 @@ export const StoryListItem = ({
 
   return (
     <GestureRecognizer
-      key={key}
       onSwipeUp={onSwipeUp}
       onSwipeDown={onSwipeDown}
       config={config}
@@ -216,15 +256,11 @@ export const StoryListItem = ({
       <SafeAreaView>
         <View style={styles.backgroundContainer}>
           {content[current]?.isVideo ? (
-            <Video
-              ref={video}
-              shouldPlay
-              source={{ uri: content[current].story }}
+            <VideoView
+              player={player}
               style={[styles.video, storyVideoStyle]}
-              resizeMode={ResizeMode.COVER}
-              isLooping
-              onLoad={() => start()}
-              isMuted={currentPage !== index}
+              contentFit="contain"
+              nativeControls={false}
             />
           ) : (
             <Image
@@ -244,12 +280,13 @@ export const StoryListItem = ({
         <View
           style={[styles.animationBarContainer, animationBarContainerStyle]}
         >
-          {content.map((index, key) => {
+          {content.map((_: IUserStoryItem, key: number) => {
             return (
               <View
                 key={key}
                 style={[styles.animationBackground, unloadedAnimationBarStyle]}
               >
+                {/* @ts-ignore: Animated.View is valid in React Native */}
                 <Animated.View
                   style={[
                     {
@@ -292,8 +329,12 @@ export const StoryListItem = ({
                     onClosePress();
                   }
                 }}
+                hitSlop={20}
               >
-                <Text style={styles.whiteText}>X</Text>
+                <Image
+                  source={require('./assets/images/close.png')}
+                  style={{ width: 15, height: 15 }}
+                />
               </TouchableOpacity>
             )}
           </View>
@@ -351,10 +392,6 @@ export const StoryListItem = ({
 };
 
 export default StoryListItem;
-
-StoryListItem.defaultProps = {
-  duration: 10000,
-};
 
 const styles = StyleSheet.create({
   container: {
