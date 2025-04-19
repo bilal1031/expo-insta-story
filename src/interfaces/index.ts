@@ -98,12 +98,16 @@ export interface StoryCircleListViewProps extends SharedCircleListProps {
   avatarFlatListProps?: CircleListViewFlatListProps;
   renderCustomAvatarComponent?: (props: {
     item: IUserStory;
-    index: number;
+    isPressed: boolean;
   }) => React.ReactNode;
 }
 
 export interface StoryCircleListItemProps extends SharedCircleListProps {
   item: IUserStory;
+  renderCustomAvatarComponent?: (props: {
+    item: IUserStory;
+    isPressed: boolean;
+  }) => React.ReactNode;
 }
 
 // TODO: add JSDoc comments where necessary
@@ -209,7 +213,7 @@ export interface StoryProps {
 
   renderCustomAvatarComponent?: (props: {
     item: IUserStory;
-    index: number;
+    isPressed: boolean;
   }) => React.ReactNode;
   /** Display username below avatars in FlatList */
   showAvatarText?: boolean;

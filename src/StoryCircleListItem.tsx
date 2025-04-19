@@ -25,6 +25,7 @@ const StoryCircleListItem = ({
   handleStoryItemPress,
   avatarImageStyle,
   avatarWrapperStyle,
+  renderCustomAvatarComponent,
 }: StoryCircleListItemProps) => {
   const [isPressed, setIsPressed] = useState(item?.seen);
 
@@ -44,6 +45,16 @@ const StoryCircleListItem = ({
   };
 
   const avatarWrapperSize = avatarSize + 4;
+
+  if (renderCustomAvatarComponent) {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => _handleItemPress(item)}>
+          {renderCustomAvatarComponent({ item, isPressed: isPressed ?? false })}
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -78,6 +89,7 @@ const StoryCircleListItem = ({
           defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
         />
       </TouchableOpacity>
+
       {showText && (
         <Text
           numberOfLines={1}

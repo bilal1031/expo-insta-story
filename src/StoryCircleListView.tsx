@@ -28,13 +28,6 @@ const StoryCircleListView = ({
       showsHorizontalScrollIndicator={false}
       ListFooterComponent={<View style={styles.footer} />}
       renderItem={({ item, index }) => {
-        if (renderCustomAvatarComponent) {
-          const custom = renderCustomAvatarComponent({ item, index });
-          if (React.isValidElement(custom)) {
-            return custom;
-          }
-          return null;
-        }
         return (
           <StoryCircleListItem
             avatarSize={avatarSize}
@@ -50,6 +43,7 @@ const StoryCircleListView = ({
             avatarTextStyle={avatarTextStyle}
             avatarImageStyle={avatarImageStyle}
             avatarWrapperStyle={avatarWrapperStyle}
+            renderCustomAvatarComponent={renderCustomAvatarComponent}
           />
         );
       }}
