@@ -20,34 +20,34 @@ const { height, width } = Dimensions.get('window');
 
 export const Story = ({
   data,
-  unPressedBorderColor,
-  pressedBorderColor,
-  unPressedAvatarTextColor,
-  pressedAvatarTextColor,
-  style,
+  unPressedBorderColor = '#c7c7c7',
+  pressedBorderColor = '#3867d6',
+  unPressedAvatarTextColor = '#222222',
+  pressedAvatarTextColor = '#3867d6',
+  style = {},
   onStart,
   onClose,
-  duration,
-  swipeText,
-  avatarSize,
-  showAvatarText,
-  avatarTextStyle,
+  duration = 10,
+  swipeText = 'Swipe Up',
+  avatarSize = 60,
+  showAvatarText = true,
+  avatarTextStyle = {},
   onStorySeen,
   renderCloseComponent,
   renderSwipeUpComponent,
   renderTextComponent,
-  loadedAnimationBarStyle,
-  unloadedAnimationBarStyle,
-  animationBarContainerStyle,
-  storyUserContainerStyle,
-  storyImageStyle,
-  storyAvatarImageStyle,
-  storyContainerStyle,
-  avatarImageStyle,
-  avatarWrapperStyle,
-  avatarFlatListProps,
-  storyVideoStyle,
-}: StoryProps) => {
+  loadedAnimationBarStyle = {},
+  unloadedAnimationBarStyle = {},
+  animationBarContainerStyle = {},
+  storyUserContainerStyle = {},
+  storyImageStyle = {},
+  storyAvatarImageStyle = {},
+  storyContainerStyle = {},
+  avatarImageStyle = {},
+  avatarWrapperStyle = {},
+  avatarFlatListProps = {},
+  storyVideoStyle = {},
+}: StoryProps & { showAvatarText?: boolean }) => {
   const [dataState, setDataState] = useState<IUserStory[]>(data);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -99,7 +99,7 @@ export const Story = ({
         const newPage = currentPage + 1;
         if (newPage < selectedData.length) {
           setCurrentPage(newPage);
-          // cube?.current?.scrollTo(newPage);
+          cube?.current?.scrollTo(newPage);
         } else {
           setIsModalOpen(false);
           setCurrentPage(0);
@@ -121,7 +121,7 @@ export const Story = ({
   }
 
   const renderStoryList = () =>
-    selectedData.map((x, i) => {
+    selectedData.map((x: any, i: number) => {
       return (
         <StoryListItem
           duration={duration * 1000}
@@ -212,6 +212,7 @@ export const Story = ({
           avatarFlatListProps={avatarFlatListProps}
         />
       </View>
+
       <Modal
         onOpened={() => {
           setShowLoading(false);
@@ -258,7 +259,3 @@ const styles = StyleSheet.create({
 });
 
 export default Story;
-
-Story.defaultProps = {
-  showAvatarText: true,
-};
