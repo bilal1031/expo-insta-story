@@ -46,8 +46,9 @@ export const StoryListItem = ({
   storyAvatarImageStyle,
   storyContainerStyle,
   storyVideoStyle,
+  initialStoryIndex = 0,
   ...props
-}: StoryListItemProps) => {
+}: StoryListItemProps & { initialStoryIndex?: number }) => {
   const [load, setLoad] = useState<boolean>(true);
   const [pressed, setPressed] = useState<boolean>(false);
   const [content, setContent] = useState<IUserStoryItem[]>(
@@ -59,7 +60,7 @@ export const StoryListItem = ({
   const [currentContent, setCurrentContent] = useState<IUserStoryItem | null>(
     null,
   );
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(initialStoryIndex);
 
   const progress = useRef(new Animated.Value(0)).current;
   const prevCurrentPage = usePrevious(currentPage);
@@ -87,7 +88,7 @@ export const StoryListItem = ({
     if (isPrevious) {
       setCurrent(content.length - 1);
     } else {
-      setCurrent(0);
+      setCurrent(initialStoryIndex);
     }
 
     let data = [...content];
@@ -98,13 +99,14 @@ export const StoryListItem = ({
           x.finish = 0;
         }
       } else {
-        x.finish = 0;
+        // Fill previous bars if initialStoryIndex > 0
+        x.finish = i < initialStoryIndex ? 1 : 0;
       }
     });
     setContent(data);
     start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, initialStoryIndex]);
 
   const prevCurrent = usePrevious(current);
 
