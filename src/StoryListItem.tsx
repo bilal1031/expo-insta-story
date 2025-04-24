@@ -57,9 +57,6 @@ export const StoryListItem = ({
       finish: 0,
     })),
   );
-  const [currentContent, setCurrentContent] = useState<IUserStoryItem | null>(
-    null,
-  );
   const [current, setCurrent] = useState(initialStoryIndex);
 
   const progress = useRef(new Animated.Value(0)).current;
@@ -135,13 +132,17 @@ export const StoryListItem = ({
       const interval = setInterval(() => {
         if (player.duration > 0) {
           progress.setValue(player.currentTime / player.duration);
-          // If video ended, go to next story
+          // If video ended, go to next story or close if last
           if (
             player.status === 'readyToPlay' &&
             player.currentTime >= player.duration - 0.1 &&
             player.duration > 0
           ) {
-            next();
+            if (current === content.length - 1) {
+              close('next');
+            } else {
+              next();
+            }
           }
         }
       }, 100);
@@ -169,7 +170,11 @@ export const StoryListItem = ({
       useNativeDriver: false,
     }).start(({ finished }) => {
       if (finished) {
-        next();
+        if (current === content.length - 1) {
+          close('next');
+        } else {
+          next();
+        }
       }
     });
   }
@@ -271,7 +276,7 @@ export const StoryListItem = ({
               style={[styles.image, storyImageStyle]}
             />
           )}
-          {load && (
+          {(load || player.playing) && (
             <View style={styles.spinnerContainer}>
               <ActivityIndicator size="large" color={'white'} />
             </View>
@@ -341,7 +346,7 @@ export const StoryListItem = ({
             )}
           </View>
         </View>
-        <View style={styles.pressContainer}>
+        <View style={[styles.pressContainer]}>
           <TouchableWithoutFeedback
             onPressIn={() => progress.stopAnimation()}
             onLongPress={() => setPressed(true)}
@@ -350,7 +355,7 @@ export const StoryListItem = ({
               startAnimation();
             }}
             onPress={() => {
-              if (!pressed && !load) {
+              if ((!pressed && !load) || videoSource) {
                 previous();
               }
             }}
@@ -365,7 +370,7 @@ export const StoryListItem = ({
               startAnimation();
             }}
             onPress={() => {
-              if (!pressed && !load) {
+              if ((!pressed && !load) || videoSource) {
                 next();
               }
             }}

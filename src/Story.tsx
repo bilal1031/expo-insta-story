@@ -57,10 +57,7 @@ export const Story = ({
 }: StoryProps & { showAvatarText?: boolean }) => {
   const [dataState, setDataState] = useState<IUserStory[]>(data);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isModalAnimationDone, setIsModalAnimationDone] =
-    useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [currentStory, setCurrentStory] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<IUserStory[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
   const cube = useRef<CubeNavigationHorizontal | AndroidCubeEffect>();
@@ -75,11 +72,6 @@ export const Story = ({
     setCurrentPage(0);
     setSelectedData(dataState);
     setIsModalOpen(true);
-
-    const storyIndex = dataState.findIndex(
-      (story: IUserStory) => story.id == item.id,
-    );
-    setCurrentStory(storyIndex);
   };
 
   useEffect(() => {
@@ -131,6 +123,10 @@ export const Story = ({
           // cube?.current?.scrollTo(newPage);
         }
       }
+    }
+
+    if (selectedData.every((story) => story.seen)) {
+      animateTranslateY(height);
     }
   };
 
@@ -211,6 +207,7 @@ export const Story = ({
   // Create an animated value
   const translateY = useRef(new Animated.Value(height)).current;
 
+  // INFO: use this function to close the modal always
   // Function to animate translateY to a target value
   const animateTranslateY = (toValue: number) => {
     Animated.timing(translateY, {
