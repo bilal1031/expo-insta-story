@@ -63,14 +63,14 @@ export const Story = ({
   const cube = useRef<CubeNavigationHorizontal | AndroidCubeEffect>();
 
   // Component Functions
-  const _handleStoryItemPress = (item: IUserStory, index?: number) => {
-    // const newData = dataState.slice(index);
+  const _handleStoryItemPress = (item: IUserStory, index: number) => {
+    const newData = dataState.slice(index);
     if (onStart) {
       onStart(item);
     }
 
-    setCurrentPage(0);
-    setSelectedData(dataState);
+    setCurrentPage(newData ? index : 0);
+    setSelectedData(newData ? newData : dataState);
     setIsModalOpen(true);
   };
 
