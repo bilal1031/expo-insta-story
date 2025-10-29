@@ -1,18 +1,22 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --clear",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "dev:android": "npx expo run:android",
+    "dev:ios": "npx expo run:ios",
+    "prebuild": "npx expo prebuild --clean",
+    "clean": "expo start --clear && rm -rf node_modules/.cache"
   },
   "dependencies": {
-    "expo": "~52.0.46",
+    "expo": "^54.0.21",
     "expo-insta-story": "../",
-    "expo-status-bar": "~2.0.1",
-    "react": "18.3.1",
-    "react-native": "0.76.9"
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2"
