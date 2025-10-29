@@ -46,8 +46,9 @@ export const StoryListItem = ({
   storyAvatarImageStyle,
   storyContainerStyle,
   storyVideoStyle,
+  initialStoryIndex = 0,
   ...props
-}: StoryListItemProps) => {
+}: StoryListItemProps & { initialStoryIndex?: number }) => {
   const [load, setLoad] = useState<boolean>(true);
   const [pressed, setPressed] = useState<boolean>(false);
   const [content, setContent] = useState<IUserStoryItem[]>(
@@ -56,10 +57,7 @@ export const StoryListItem = ({
       finish: 0,
     })),
   );
-  const [currentContent, setCurrentContent] = useState<IUserStoryItem | null>(
-    null,
-  );
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(initialStoryIndex);
 
   const progress = useRef(new Animated.Value(0)).current;
   const prevCurrentPage = usePrevious(currentPage);
@@ -87,7 +85,7 @@ export const StoryListItem = ({
     if (isPrevious) {
       setCurrent(content.length - 1);
     } else {
-      setCurrent(0);
+      setCurrent(initialStoryIndex);
     }
 
     let data = [...content];
@@ -98,13 +96,14 @@ export const StoryListItem = ({
           x.finish = 0;
         }
       } else {
-        x.finish = 0;
+        // Fill previous bars if initialStoryIndex > 0
+        x.finish = i < initialStoryIndex ? 1 : 0;
       }
     });
     setContent(data);
     start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, initialStoryIndex]);
 
   const prevCurrent = usePrevious(current);
 
@@ -133,13 +132,17 @@ export const StoryListItem = ({
       const interval = setInterval(() => {
         if (player.duration > 0) {
           progress.setValue(player.currentTime / player.duration);
-          // If video ended, go to next story
+          // If video ended, go to next story or close if last
           if (
             player.status === 'readyToPlay' &&
             player.currentTime >= player.duration - 0.1 &&
             player.duration > 0
           ) {
-            next();
+            if (current === content.length - 1) {
+              close('next');
+            } else {
+              next();
+            }
           }
         }
       }, 100);
@@ -167,7 +170,11 @@ export const StoryListItem = ({
       useNativeDriver: false,
     }).start(({ finished }) => {
       if (finished) {
-        next();
+        if (current === content.length - 1) {
+          close('next');
+        } else {
+          next();
+        }
       }
     });
   }
@@ -269,7 +276,7 @@ export const StoryListItem = ({
               style={[styles.image, storyImageStyle]}
             />
           )}
-          {load && (
+          {(load || player.playing) && (
             <View style={styles.spinnerContainer}>
               <ActivityIndicator size="large" color={'white'} />
             </View>
@@ -339,7 +346,7 @@ export const StoryListItem = ({
             )}
           </View>
         </View>
-        <View style={styles.pressContainer}>
+        <View style={[styles.pressContainer]}>
           <TouchableWithoutFeedback
             onPressIn={() => progress.stopAnimation()}
             onLongPress={() => setPressed(true)}
@@ -348,7 +355,7 @@ export const StoryListItem = ({
               startAnimation();
             }}
             onPress={() => {
-              if (!pressed && !load) {
+              if ((!pressed && !load) || videoSource) {
                 previous();
               }
             }}
@@ -363,7 +370,7 @@ export const StoryListItem = ({
               startAnimation();
             }}
             onPress={() => {
-              if (!pressed && !load) {
+              if ((!pressed && !load) || videoSource) {
                 next();
               }
             }}

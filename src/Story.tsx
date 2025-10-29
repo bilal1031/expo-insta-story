@@ -4,16 +4,22 @@ import {
   View,
   Platform,
   StyleSheet,
-  Text,
   ActivityIndicator,
+  Pressable,
+  Animated,
+  Modal,
+  Easing,
 } from 'react-native';
-import Modal from 'react-native-modalbox';
 
 import StoryListItem from './StoryListItem';
 import StoryCircleListView from './StoryCircleListView';
 import { isNullOrWhitespace } from './helpers';
+
+// @ts-ignore
 import AndroidCubeEffect from './components/AndroidCubeEffect';
+// @ts-ignore
 import CubeNavigationHorizontal from './components/CubeNavigationHorizontal';
+
 import { IUserStory, NextOrPrevious, StoryProps } from './interfaces';
 
 const { height, width } = Dimensions.get('window');
@@ -36,6 +42,7 @@ export const Story = ({
   renderCloseComponent,
   renderSwipeUpComponent,
   renderTextComponent,
+  renderCustomAvatarComponent,
   loadedAnimationBarStyle = {},
   unloadedAnimationBarStyle = {},
   animationBarContainerStyle = {},
@@ -51,32 +58,31 @@ export const Story = ({
   const [dataState, setDataState] = useState<IUserStory[]>(data);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [currentStory, setCurrentStory] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<IUserStory[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(true);
   const cube = useRef<CubeNavigationHorizontal | AndroidCubeEffect>();
 
   // Component Functions
-  const _handleStoryItemPress = (item: IUserStory, index?: number) => {
-    // const newData = dataState.slice(index);
+  const _handleStoryItemPress = (item: IUserStory, index: number) => {
+    const newData = dataState.slice(index);
     if (onStart) {
       onStart(item);
     }
 
-    setCurrentPage(0);
-    setSelectedData(dataState);
+    setCurrentPage(newData ? index : 0);
+    setSelectedData(newData ? newData : dataState);
     setIsModalOpen(true);
-
-    const storyIndex = dataState.findIndex(
-      (story: IUserStory) => story.id == item.id,
-    );
-    setCurrentStory(storyIndex);
   };
 
   useEffect(() => {
     handleSeen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
+
+  useEffect(() => {
+    if (isModalOpen) animateTranslateY(0);
+    else animateTranslateY(height);
+  }, [isModalOpen]);
 
   const handleSeen = () => {
     const seen = selectedData[currentPage];
@@ -93,7 +99,7 @@ export const Story = ({
     }
   };
 
-  function onStoryFinish(state: NextOrPrevious) {
+  const onStoryFinish = (state: NextOrPrevious) => {
     if (!isNullOrWhitespace(state)) {
       if (state == 'next') {
         const newPage = currentPage + 1;
@@ -101,7 +107,7 @@ export const Story = ({
           setCurrentPage(newPage);
           cube?.current?.scrollTo(newPage);
         } else {
-          setIsModalOpen(false);
+          animateTranslateY(0);
           setCurrentPage(0);
           if (onClose) {
             onClose(selectedData[selectedData.length - 1]);
@@ -110,7 +116,7 @@ export const Story = ({
       } else if (state == 'previous') {
         const newPage = currentPage - 1;
         if (newPage < 0) {
-          setIsModalOpen(false);
+          animateTranslateY(0);
           setCurrentPage(0);
         } else {
           setCurrentPage(newPage);
@@ -118,7 +124,11 @@ export const Story = ({
         }
       }
     }
-  }
+
+    if (selectedData.every((story) => story.seen)) {
+      animateTranslateY(height);
+    }
+  };
 
   const renderStoryList = () =>
     selectedData.map((x: any, i: number) => {
@@ -137,7 +147,7 @@ export const Story = ({
           renderCloseComponent={renderCloseComponent}
           renderTextComponent={renderTextComponent}
           onClosePress={() => {
-            setIsModalOpen(false);
+            animateTranslateY(height);
             if (onClose) {
               onClose(x);
             }
@@ -194,6 +204,32 @@ export const Story = ({
     );
   };
 
+  // Create an animated value
+  const translateY = useRef(new Animated.Value(height)).current;
+
+  // INFO: use this function to close the modal always
+  // Function to animate translateY to a target value
+  const animateTranslateY = (toValue: number) => {
+    Animated.timing(translateY, {
+      toValue,
+      duration: 300,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1.0),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished && toValue === height) {
+        setIsModalOpen(false);
+      }
+    });
+  };
+
+  const animatedStyle = {
+    transform: [
+      {
+        translateY: translateY,
+      },
+    ],
+  };
+
   return (
     <Fragment>
       <View style={style}>
@@ -210,28 +246,50 @@ export const Story = ({
           avatarWrapperStyle={avatarWrapperStyle}
           avatarImageStyle={avatarImageStyle}
           avatarFlatListProps={avatarFlatListProps}
+          renderCustomAvatarComponent={renderCustomAvatarComponent}
         />
       </View>
 
       <Modal
-        onOpened={() => {
+        visible={isModalOpen}
+        onRequestClose={() => {
+          animateTranslateY(height);
           setShowLoading(false);
-          cube.current?.setCurrentPage(currentStory);
         }}
-        style={styles.modal}
-        isOpen={isModalOpen}
-        onClosed={() => {
-          setIsModalOpen(false);
-          setShowLoading(true);
+        transparent
+        onDismiss={() => {
+          animateTranslateY(height);
+          setShowLoading(false);
         }}
-        position="center"
-        swipeToClose
-        swipeArea={250}
-        backButtonClose
-        coverScreen={true}
+        animationType="fade"
+        onShow={() => {
+          setShowLoading(false);
+        }}
       >
-        {showLoading && renderLoading()}
-        {renderCube()}
+        <Pressable
+          style={[
+            {
+              flex: 1,
+              backgroundColor: '#00000040',
+              justifyContent: 'flex-end',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            },
+            styles.modal,
+          ]}
+          onPress={() => {
+            animateTranslateY(0);
+            setShowLoading(false);
+          }}
+        />
+
+        <Animated.View style={[styles.modal, animatedStyle]}>
+          {showLoading && renderLoading()}
+          {renderCube()}
+        </Animated.View>
       </Modal>
     </Fragment>
   );

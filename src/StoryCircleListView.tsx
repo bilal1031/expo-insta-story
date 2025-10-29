@@ -16,6 +16,7 @@ const StoryCircleListView = ({
   avatarImageStyle,
   avatarWrapperStyle,
   avatarFlatListProps,
+  renderCustomAvatarComponent,
 }: StoryCircleListViewProps) => {
   return (
     <FlatList
@@ -26,23 +27,26 @@ const StoryCircleListView = ({
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       ListFooterComponent={<View style={styles.footer} />}
-      renderItem={({ item, index }) => (
-        <StoryCircleListItem
-          avatarSize={avatarSize}
-          handleStoryItemPress={() =>
-            handleStoryItemPress && handleStoryItemPress(item, index)
-          }
-          unPressedBorderColor={unPressedBorderColor}
-          pressedBorderColor={pressedBorderColor}
-          unPressedAvatarTextColor={unPressedAvatarTextColor}
-          pressedAvatarTextColor={pressedAvatarTextColor}
-          item={item}
-          showText={showText}
-          avatarTextStyle={avatarTextStyle}
-          avatarImageStyle={avatarImageStyle}
-          avatarWrapperStyle={avatarWrapperStyle}
-        />
-      )}
+      renderItem={({ item, index }) => {
+        return (
+          <StoryCircleListItem
+            avatarSize={avatarSize}
+            handleStoryItemPress={() =>
+              handleStoryItemPress && handleStoryItemPress(item, index)
+            }
+            unPressedBorderColor={unPressedBorderColor}
+            pressedBorderColor={pressedBorderColor}
+            unPressedAvatarTextColor={unPressedAvatarTextColor}
+            pressedAvatarTextColor={pressedAvatarTextColor}
+            item={item}
+            showText={showText}
+            avatarTextStyle={avatarTextStyle}
+            avatarImageStyle={avatarImageStyle}
+            avatarWrapperStyle={avatarWrapperStyle}
+            renderCustomAvatarComponent={renderCustomAvatarComponent}
+          />
+        );
+      }}
       {...avatarFlatListProps}
     />
   );
